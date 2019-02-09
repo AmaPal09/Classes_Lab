@@ -3,6 +3,7 @@
 
 class AbstractMelonOrder(): 
     """An abstract base class that other Melon Orders inherit from. """
+    tax = None
 
     def __init__(self,species,qty): 
         self.species = species
@@ -29,30 +30,46 @@ class AbstractMelonOrder():
 
 class DomesticMelonOrder(AbstractMelonOrder):
     """A melon order within the USA."""
-    def __init__(self,species,qty,order_type = "domestic", tax = 0.08): 
-        super().__init__(species,qty)
-        self.order_type = order_type
-        self.tax = tax
+    tax = .08
+    order_type = "domestic"
 
+    # def __init__(self,species,qty): 
+    #     super().__init__(species,qty)
      
-
 
 class InternationalMelonOrder(AbstractMelonOrder):
     """An international (non-US) melon order."""
-    def __init__(self,species,qty,country_code,order_type = "international",tax = 0.17): 
+    tax = .17
+    order_type = "international"
+
+    def __init__(self,species,qty,country_code,): 
         super().__init__(species,qty)
         self.country_code = country_code
-        self.order_type = order_type
-        self.tax = tax
-
+   
     def get_total(self):
         """Calculate price, including tax."""
-        return super().get_total() + 3
-
+        if self.qty < 10:
+            return super().get_total() + 3
+        else:
+            return super.get_total() 
 
     def get_country_code(self):
         """Return the country code."""
         return self.country_code
+
+
+class GovernmentMelonOrder(AbstractMelonOrder):
+    """Government Melon Orders that need no taxes """
+    passed_inspection = False
+    tax = 0 
+
+    def mark_inspection(self,passed): 
+        if passed == True:
+            self.passed_inspection = True
+        elif passed == False: 
+            self.passed_inspection = False
+        else: 
+            print("Provide True or False as parameters")
 
 
 
